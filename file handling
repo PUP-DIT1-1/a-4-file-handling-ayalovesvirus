@@ -1,0 +1,130 @@
+//Aaliyah R. Aliluran
+//Mrs. Greta 
+import os
+
+FILE_NAME = "records.txt"
+names = []
+grades = []
+
+def load_file():
+    if not os.path.exists(FILE_NAME):
+        open(FILE_NAME, "w").close()
+        print("New file created.")
+        return
+
+    try:
+        with open(FILE_NAME, "r") as file:
+            for line in file:
+                data = line.strip().split(",")
+                if len(data) == 2:
+                    names.append(data[0])
+                    grades.append(int(data[1]))
+        print("Records loaded successfully!")
+    except:
+        print("Error loading file!")
+
+def save_file():
+    try:
+        with open(FILE_NAME, "w") as file:
+            for i in range(len(names)):
+                file.write(f"{names[i]},{grades[i]}\n")
+    except:
+        print("Error saving file!")
+
+def get_number():
+    while True:
+        try:
+            return int(input())
+        except:
+            print("Enter a valid number: ", end="")
+
+def add_record():
+    name = input("Enter name: ")
+    print("Enter grade: ", end="")
+    grade = get_number()
+
+    names.append(name)
+    grades.append(grade)
+
+    save_file()
+    print("Record saved!")
+
+def view_records():
+    if len(names) == 0:
+        print("No records found.")
+        return
+
+    print("\n--- RECORDS ---")
+    for i in range(len(names)):
+        print(f"{i} | {names[i]} - {grades[i]}")
+
+def update_record():
+    view_records()
+    if len(names) == 0:
+        return
+
+    print("Enter record number to update: ", end="")
+    index = get_number()
+
+    if index < 0 or index >= len(names):
+        print("Invalid input!")
+        return
+
+    new_name = input("Enter new name: ")
+    print("Enter new grade: ", end="")
+    new_grade = get_number()
+
+    names[index] = new_name
+    grades[index] = new_grade
+
+    save_file()
+    print("Record updated!")
+
+def delete_record():
+    view_records()
+    if len(names) == 0:
+        return
+
+    print("Enter record number to delete: ", end="")
+    index = get_number()
+
+    if index < 0 or index >= len(names):
+        print("Invalid input!")
+        return
+
+    names.pop(index)
+    grades.pop(index)
+
+    save_file()
+    print("Record deleted!")
+
+def main():
+    load_file()
+
+    while True:
+        print("\nMENU")
+        print("1. Add Record")
+        print("2. View Records")
+        print("3. Update Record")
+        print("4. Delete Record")
+        print("5. Exit")
+
+        print("Enter choice: ", end="")
+        choice = get_number()
+
+        if choice == 1:
+            add_record()
+        elif choice == 2:
+            view_records()
+        elif choice == 3:
+            update_record()
+        elif choice == 4:
+            delete_record()
+        elif choice == 5:
+            print("Program closed.")
+            break
+        else:
+            print("Invalid choice!")
+
+if _name_ == "_main_":
+    main()
